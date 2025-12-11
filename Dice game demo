@@ -1,0 +1,176 @@
+'''此部分为简短代码演示python的精简与实用性，也更直观让各位初学者感受到python最简单易学'''
+import numpy as np
+
+'''题目1 温度数据分析
+某城市一周的最高气温（℃）为【28，30，29，31，32，30，29】
+-计算平均气温，最高气温和最低气温
+-找出气温超过30℃的天数
+'''
+# 先将数据存储为列表
+print('问题1：')
+tem = np.array([28,30,29,31,32,30,29])
+# 求平均温度
+avg = np.average(tem)
+# 输出平均温度保留两位小数
+print('平均气温为：%.2f' % avg, '℃')
+# for循环查询气温超过30℃的天数
+count = 0
+for temp in tem:
+    if temp > 30:
+        count += 1
+print(f'气温超过30℃的天数：{count}天')
+# 简化
+counts = np.sum(tem > 30)
+print('气温超过30℃的天数0：',counts, '天')
+# 或直接print函数
+print('气温超过30℃的天数01：',np.sum(tem > 30), '天')
+# 或者直接np函数
+# 先用np.where把布尔值转为0/1,用cumsum计算累积和,取最后一个值得到总数，
+# 太过复杂为人类思维，重理解逻辑
+print('气温超过30℃的天数1：', np.cumsum(np.where(tem > 30,1,0))[-1], '天')
+# 直接len函数判断有多少个符合条件元素
+print('气温超过30℃的天数2：', len(tem[tem > 30]), '天')
+
+'''题目2 学生成绩统计
+某班级5名学生的数学成绩为【85，90，78，92，88】
+-计算成绩平均分，中位数和标准差
+-将成绩转换为十分制'''
+print()
+print('问题2：')
+# 定义成绩列表
+grad = np.array([85,90,78,92,88])
+# np.average函数求平均分
+print('平均分：', np.average(grad), '分')
+# 中位数
+print('中位数：', np.median(grad), '分')
+# 标准差
+print('标准差：%.2f'% np.var(grad), '分')
+# 十分制,np.array列表直接除10，注意如果不是np.array函数无法直接/10
+print('十分制：', grad/10)
+
+'''题目3 矩阵运算
+给定矩阵 A = 【【1，2】，【3，4】】
+B = 【【5，6】，【7，8】】
+-计算A+B和AB
+-计算A和B的矩阵乘法
+'''
+print()
+print('问题3:')
+# 建立array列表
+A = np.array(([1,2],[3,4]))
+B = np.array(([5,6],[7,8]))
+print('A+B:\n', A + B)
+print('A*B:\n', A * B)
+print('矩阵乘法；\n', A@B)
+
+'''题目4 随机数据生成
+生成一个（3，4）的随机整数数组，范围【0，10）
+-计算每列的最大值和每行的最小值
+-将数组中的所有奇数替换为-1
+'''
+# 三行四列数组生成
+# 设置种子将值固定
+print()
+print('问题4：')
+np.random.seed(0)
+arr = np.random.randint(0,10,(3,4))
+print('随机数组为：\n', arr)
+# np.max取最大值，设置参数axis=0代表列 axis=0代表行
+print('每列的最大值：\n', np.max(arr,axis=0))
+print('每行的最小值：\n', np.min(arr,axis=1))
+# where三个参数为条件，符合条件的改为_,不符合条件的改为_
+print('改奇数元素：\n', np.where(arr%2==1,-1,arr))
+# 布尔索引,直接在原数组操作，改变原数组
+arr[arr%2==1]=-1
+print('改奇数元素1：\n', arr)
+# 拓展索引操作
+# 改变行元素
+arr[0] = 1
+print('改变行元素:\n', arr)
+# 改变列元素
+arr[:,0] = 1
+print('改变列元素：\n', arr)
+
+'''题目5 数组变形
+创建一个1到12的一维数组，并转换为（3，4）的二维数组
+-计算每行的和与每列的平均值
+-将数组展平为一维数组'''
+print()
+print('问题5：')
+# 创建数组
+arr = np.random.randint(1,12,12)
+print('数组为：', arr)
+# 转换为二维数组
+arr = np.reshape(arr,(3,4))
+print('转为二维数组为：\n', arr)
+# 每行的和
+print('每行的和：', np.sum(arr,axis=1))
+# 每列的平均值
+print('每列的平均值：', np.mean(arr,axis=0))
+#展平为一维数组
+print('展平为一维数组：', np.reshape(arr,(12)))
+
+'''题目6 不二索引
+生成一个（5，5）的随机数组，范围【0，20）
+-找出数组中大于10的元素
+-将所有大于10的元素替换为0'''
+print()
+print('问题5：')
+# 定义数组
+# 设置种子固定值
+np.random.seed(0)
+arr = np.random.randint(0,20,(5,5))
+print('数组为：\n', arr)
+print('大于10的元素：', arr[arr>10])
+arr[arr>10] = 0
+print('大于10的元素替换为0:\n', arr)
+
+'''问题7 统计函数应用
+某公司6个月的销售额（万元）为【120，135，110，125，130，140】
+-计算销售额的总和，均值和方差
+-找出销售额最高的月份和最低的月份
+'''
+# 设置数组列表
+print()
+print('问题7：')
+arr = np.array([120,135,110,125,130,140])
+# 销售额总和
+print('销售额总和：', np.sum(arr),'万元')
+print('销售额均值：%.2f'% np.average(arr), '万元') #或用np.mean
+print('销售额方差：%.2f'% np.var(arr),'万元')
+# 最高月份最低月份
+print('最高的月份：', np.argmax(arr)+1, '月')
+print('最低的月份', np.argmin(arr)+1,'月')
+
+'''题目8 数组拼接
+给定A=【1，2，3】和B=【4，5，6】
+-将A和B水平拼接为一个新数组
+将A和B垂直拼接为一个新数组'''
+print()
+print('问题8：')
+# 定义数组
+A = np.array([1,2,3])
+B = np.array([4,5,6])
+# 水平拼接
+print('水平拼接：', np.concatenate([A,B]))
+# 垂直拼接
+print('垂直拼接：\n', np.reshape(np.concatenate([A,B]),(2,3)))
+
+'''题目9 唯一值与排序
+给定数组[2,1,2,3,1,4,3]
+-找出数组中唯一值并排序
+-计算每个唯一值出现的次数'''
+print()
+print('问题9：')
+# np.unique去重获取唯一值
+arr = np.array([2,1,2,3,1,4,3])
+u_arr,counts = np.unique(arr, return_counts =True)
+print('唯一值排序：', u_arr)
+print('唯一值次数：', counts)
+# 或for循环
+d = []
+for i in range(len(u_arr)):
+    d = d+[len(arr[arr==u_arr[i]])]
+print('for循环结果：', d) # 注意print缩进，在头部为输出d结果，在d缩进为输出运行for循环的进程
+
+'''题目10 缺失值处理''''''题目10 缺失值处理''''''题目10 缺失值处理''''''题目10 缺失值处理''''''题目10 缺失值处理''''''题目10 缺失值处理'''
